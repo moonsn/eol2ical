@@ -12,7 +12,7 @@ $count = (int)fgets($fp);
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>教务在线一键评估系统</title>
+    <title>清华版教务系统课表导出到日历 - moonsn</title>
 
     <!-- Bootstrap core CSS -->
     <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
@@ -35,11 +35,18 @@ $count = (int)fgets($fp);
 
     <div class="container">
       <form class="form-signin" action="./login.php" role="form" method="post">
-        <h2>一键评估^_^</h2><blockquote><p class="lead">累计评估<span class="label label-success "><?php echo $count;?></span>次</p></blockquote>
-        <h2 class="form-signin-heading">请 登录</h2>
-        <input type="text" name="j_username" class="form-control" placeholder="教务在线账号" value="1304010126" required autofocus>
-        <input type="password" name="j_password" class="form-control" placeholder="密码" value="220807" required>
-        <div class="">
+        <h2>导出教务在线的课表到日历^_^</h2><blockquote><p class="lead">累计导出<span class="label label-success "><?php echo $count;?></span>次</p></blockquote>
+        <h2 class="form-signin-heading">教务在线 信息：</h2>
+        <div class="input-group">
+            <span class="input-group-addon">用户</span>
+            <input type="text" name="j_username" class="form-control" placeholder="教务在线账号" value="1304010126" required autofocus>
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon"> 密码 </span>
+            <input type="text" name="j_password" class="form-control" placeholder="密码" value="220807" required>
+        </div>
+        <br>
+        <div class="form-group">
           <label>
             验证码：<img name="jcaptcha" id="jcaptcha" onclick="refresh_jcaptcha(this)"
                                  src="./get.php"
@@ -53,14 +60,28 @@ $count = (int)fgets($fp);
                             </script>
           </label>
           <label>
-            最近好像不用填验证码。。。
+            如果验证码没有显示，请点击图片获取验证码。
           </label>
         <input type="text" name="j_captcha" class="form-control" placeholder="验证码">
 
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">查询</button>
+        学年：
+        <select class="form-control" name="year">
+            <option value="2016">2016</option>
+        </select>
+        学期：
+        <select class="form-control" name="term">
+            <option value="1">春季</option>
+            <option value="2">秋季</option>
+        </select>
+        <br/>
+        <div class="alert alert-info" role="alert">
+            你的教务在线信息只会使用一次，本程序不会记录你的任何信息，下次使用还需要教务在线信息，请放心使用。
+            如果你遇到问题或者BUG，欢迎吐槽~moonsn1994@gmail.com
+        </div>
+        <br/>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">导出</button>
       </form>
-
     </div> <!-- /container -->
 
 
@@ -68,3 +89,7 @@ $count = (int)fgets($fp);
     <script src="./assets/js/ie10-viewport-bug-workaround.js"></script>
   </body>
 </html>
+<script>
+iobj = document.getElementById("j_captcha");
+refresh_jcaptcha(iobj);
+</script>
