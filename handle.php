@@ -1,25 +1,18 @@
 <?php
 include_once "curl_post/curl_post.php";
 
-$fp = fopen("count.txt", "r+");
-$count = (int)fgets($fp);
-//echo $count++;
-$count++;
-$fp = fopen("count.txt", "r+");
-fwrite($fp, $count);
-fclose($fp);
+
 $year = $_GET['y'];
 $term = $_GET['t'];
 $reminder = $_GET['r'];
 $reminder_t = $_GET['rt'];
 
-vlogin("http://202.118.201.228/academic/student/currcourse/currcourse.jsdo?groupId=&moduleId=2000");
+vlogin("http://202.118.201.228/academic/student/currcourse/currcourse.jsdo?groupId=&moduleId=2000","", true);
 
-$start_url = "http://202.118.201.228/academic/calendar/calendarViewList.do?groupId=&sortColumn=year&moduleId=400&sortDirection=-1&pagingPage=1&pagingNumberPer=100";
-$content = vlogin($start_url);
+$start_url = "http://202.118.201.228/academic/calendar/calendarViewList.do";
+$content = vlogin($start_url, "", true);
 //echo $start_url;
 //echo $content;
-
 
 $pattern = '/start_year=parseInt\((\d+)\);/';
 if (1 != preg_match($pattern, $content, $match)) {
@@ -73,12 +66,21 @@ header('Content-type: text/calendar; charset=utf-8');
 header('Content-Disposition: attachment; filename="downloaded.ics"');
 echo "BEGIN:VCALENDAR\nVERSION:2.0\nX-WR-CALNAME:课程\n".$str."\nEND:VCALENDAR";
 
+$fp = fopen("count.txt", "r+");
+$count = (int)fgets($fp);
+//echo $count++;
+$count++;
+$fp = fopen("count.txt", "r+");
+fwrite($fp, $count);
+fclose($fp);
+
 function getCourseOfAweek($week) {
 
     # get content
     $post_data = "yearid=36&termid=1&whichWeek=$week";
     $post_url = "http://202.118.201.228/academic/manager/coursearrange/studentWeeklyTimetable.do?".$post_data;
-    $content = vlogin($post_url);
+    vlogin("http://202.118.201.228/academic/student/currcourse/currcourse.jsdo?groupId=&moduleId=2000", "", true);
+    $content = vlogin($post_url, "", true);
     //var_dump($content);
 
     $p = '/<td name="(.+)">([^<]+)?<\/td>/';

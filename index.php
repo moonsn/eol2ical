@@ -1,4 +1,6 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
+
 <?php
 $fp = fopen("count.txt", "r+");
 $count = (int)fgets($fp);
@@ -41,7 +43,7 @@ $count = (int)fgets($fp);
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon">用户</span>
-                    <input type="text" name="j_username" class="form-control" placeholder="教务在线账号" value="" required autofocus>
+                    <input type="text" name="j_username" id="username" class="form-control" placeholder="教务在线账号" value="" required autofocus>
                 </div>
             </div>
             <div class="form-group">
@@ -60,15 +62,21 @@ $count = (int)fgets($fp);
                     style="cursor:pointer;"/>
                     <script language="Javascript">
                     function refresh_jcaptcha(obj) {
-                        obj.src = "./getcaptcha.php?" + Math.random();
+                        var username = document.getElementById('username').value;
+                        if(username == '') {
+                            alert('请先填写用户名，再获取验证码！');
+                        }
+                        obj.src = "./getcaptcha.php?t=" + Math.random() + "&u=" + username;
                     }
                     </script>
                 </label>
                 <label>
-                    如果验证码没有显示，请点击图片获取验证码。
                 </label>
                 <input type="text" name="j_captcha" class="form-control" placeholder="验证码">
 
+            </div>
+            <div class="alert alert-error" role="alert">
+                请先填写账号后再获取验证码。
             </div>
             <div class="form-group">
                 学年：
