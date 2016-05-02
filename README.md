@@ -18,6 +18,11 @@
 
 项目里面包含的文件可以在我的另外一个repo找到：[curl_post](https://github.com/moonsn/curl_post)
 
+## 效果
+
+![](http://ww2.sinaimg.cn/large/a15b4afegw1f3h463k25ij21xm13gwrl)
+![](http://ww2.sinaimg.cn/large/a15b4afegw1f3h47yanixj20u01hcacu)
+
 
 ## 可以使用的设备
 
