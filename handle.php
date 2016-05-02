@@ -8,15 +8,23 @@ $count++;
 $fp = fopen("count.txt", "r+");
 fwrite($fp, $count);
 fclose($fp);
+$year = $_GET['y'];
+$term = $_GET['t'];
+$reminder = $_GET['r'];
+$reminder_t = $_GET['rt'];
 
 vlogin("http://202.118.201.228/academic/student/currcourse/currcourse.jsdo?groupId=&moduleId=2000");
 
-$content = vget("http://202.118.201.228/academic/calendar/calendarViewList.do?groupId=&sortColumn=year&moduleId=400&termid=1&yearid=36&sortDirection=-1&pagingPage=1&pagingNumberPer=100");
+$start_url = "http://202.118.201.228/academic/calendar/calendarViewList.do?groupId=&sortColumn=year&moduleId=400&sortDirection=-1&pagingPage=1&pagingNumberPer=100";
+$content = vlogin($start_url);
+//echo $start_url;
+//echo $content;
 
 
 $pattern = '/start_year=parseInt\((\d+)\);/';
 if (1 != preg_match($pattern, $content, $match)) {
-    echo "没有匹配到年份";
+    echo "请检查输入的<strong>验证码</strong>是否正确。请返回，刷新网页重试。如果多次尝试还是失败，请联系我，邮箱：moonsn1994@gmail.com";
+    exit();
 }
 $start_year = $match[1];
 $pattern = '/start_month=parseInt\((\d+)\);/';
@@ -36,6 +44,7 @@ if (1 != preg_match($pattern, $content, $match)) {
 $start_weeks = $match[1];
 
 //echo "开始日期：$start_year $start_month $start_day 周数：$start_weeks";
+
 
 $start_date = mktime(0,0,0,$start_month, $start_day, $start_year);
 
@@ -62,7 +71,7 @@ for ($w = 1; $w <= $start_weeks; $w++) {
 
 header('Content-type: text/calendar; charset=utf-8');
 header('Content-Disposition: attachment; filename="downloaded.ics"');
-echo "BEGIN:VCALENDAR\nVERSION:2.0\n".$str."\nEND:VCALENDAR";
+echo "BEGIN:VCALENDAR\nVERSION:2.0\nX-WR-CALNAME:课程\n".$str."\nEND:VCALENDAR";
 
 function getCourseOfAweek($week) {
 
@@ -130,13 +139,22 @@ function display($course) {
     $desc = $course['desc'];
 
     $event = "";
+    $uid = $stime.$etime.'-'.rand(10000,99999);
 
     $event .= "\nBEGIN:VEVENT";
+    $event .= "\nUID:$uid";
     $event .= "\nDTSTART;TZID=Asia/Shanghai:$stime";
     $event .= "\nDTEND;TZID=Asia/Shanghai:$etime";
     $event .= "\nSUMMARY:$summary";
     $event .= "\nLOCATION:$location";
     $event .= "\nDESCRIPTION:$desc";
+    if ($GLOBALS['reminder'] == 'on') {
+        $event .= "\nBEGIN:VALARM";
+        $event .= "\nTRIGGER:-PT{$GLOBALS['reminder_t']}M";
+        $event .= "\nACTION:DISPLAY";
+        $event .= "\nDESCRIPTION: 【$summary 】还有{$GLOBALS['reminder_t']}分钟就要开始了！";
+        $event .= "\nEND:VALARM";
+    }
     $event .= "\nEND:VEVENT";
     return $event;
 }
