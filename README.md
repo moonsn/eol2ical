@@ -12,7 +12,7 @@
 
 ## demo
 
-你可以到这里使用：[eolical](https://en.wikipedia.org/wiki/ICalendar)
+你可以到这里使用：[eolical](http://lovesigns.cn/eolical/index.php)
 
 ## 如果你要自己使用
 
