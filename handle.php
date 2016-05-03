@@ -63,8 +63,11 @@ for ($w = 1; $w <= $start_weeks; $w++) {
 }
 
 header('Content-type: text/calendar; charset=utf-8');
-header('Content-Disposition: attachment; filename="downloaded.ics"');
-echo "BEGIN:VCALENDAR\nVERSION:2.0\nX-WR-CALNAME:课程\n".$str."\nEND:VCALENDAR";
+$calendar =  "BEGIN:VCALENDAR\nVERSION:2.0\nX-WR-CALNAME:课程\n".$str."\nEND:VCALENDAR";
+
+$ics_fp = fopen($_SESSION['uid'].'.ics', 'w');
+fwrite($ics_fp, $calendar);
+fclose($ics_fp);
 
 $fp = fopen("count.txt", "r+");
 $count = (int)fgets($fp);
@@ -73,6 +76,8 @@ $count++;
 $fp = fopen("count.txt", "r+");
 fwrite($fp, $count);
 fclose($fp);
+
+header('location: ./'.$_SESSION['uid'].'.ics');
 
 function getCourseOfAweek($week) {
 
